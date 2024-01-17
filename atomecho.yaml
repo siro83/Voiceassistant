@@ -52,9 +52,8 @@ microphone:
 speaker:
   - platform: i2s_audio
     id: echo_speaker
-    i2s_dout_pin: GPIO22
-    dac_type: external
-    mode: mono
+    dac_type: internal # wrong config to mute speaker
+    mode: left # wrong config to mute speaker
 
 voice_assistant:
   id: va
@@ -86,6 +85,13 @@ voice_assistant:
         green: 0%
         brightness: 100%
         effect: none
+  on_tts_end:
+    - homeassistant.service:
+        service: media_player.play_media
+        data:
+          media_content_id: !lambda 'return x;'
+          media_content_type: audio/mpeg
+          entity_id: media_player.wohnzimmer_sonos
   on_end:
     - delay: 100ms
     - wait_until:
